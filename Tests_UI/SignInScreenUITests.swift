@@ -29,15 +29,19 @@ class SignInScreenUITests: XCTestCase {
 
     // MARK: - Tests
 
-    
     func testGoBack() {
         self.signInRobot
-                .validateOnSignInScreen()
                 .select(button: .back)
                 .validateOffSignInScreen()
+
+        self.splashRobot
+                .validateOnSplashScreen()
     }
 
     func testHowDoesItWork() {
+        self.signInRobot
+                .select(button: .howWork)
+                .validateOffSignInScreen()
     }
 
     func testEnterWords () {
