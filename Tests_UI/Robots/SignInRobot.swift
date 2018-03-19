@@ -25,7 +25,7 @@ protocol SignInRobot: BasicRobot { }
 enum SignInScreenButton {
     case
     back,
-    howWork,
+    howDoesItWork,
     signIn,
     wordsLeft(words: Int)
     
@@ -33,7 +33,7 @@ enum SignInScreenButton {
         switch self {
         case .back:
             return Localized("back_action_title")
-        case .howWork:
+        case .howDoesItWork:
             return Localized("passphrase_sign_in_explanation_title")
         case .signIn:
             return Localized("passphrase_sign_in_button")

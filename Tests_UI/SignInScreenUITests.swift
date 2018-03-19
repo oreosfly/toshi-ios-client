@@ -40,7 +40,7 @@ class SignInScreenUITests: XCTestCase {
 
     func testHowDoesItWork() {
         self.signInRobot
-                .select(button: .howWork)
+                .select(button: .howDoesItWork)
                 .validateOffSignInScreen()
     }
 
