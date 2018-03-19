@@ -123,6 +123,11 @@ extension EarlGreyRobot: BasicRobot {
         viewWith(label: accessibilityLabel, file: file, line: line)
             .perform(grey_tap())
     }
+
+    func typeText(_ text: String, onViewWith accessibilityLabel: String, file: StaticString, line: UInt) {
+        viewWith(label: accessibilityLabel, file: file, line: line)
+                .perform(grey_typeText(text))
+    }
 }
 
 // MARK: - Mix-in Robots
@@ -131,3 +136,4 @@ extension EarlGreyRobot: MyProfileRobot { /*mix-in */ }
 extension EarlGreyRobot: SplashScreenRobot { /* mix-in */ }
 extension EarlGreyRobot: SignInRobot { /* mix-in */ }
 extension EarlGreyRobot: TabBarRobot { /* mix-in */ }
+extension EarlGreyRobot: HowDoesItWorkScreenRobot { /* mix-in */ }

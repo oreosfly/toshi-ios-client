@@ -21,6 +21,7 @@ class SignInScreenUITests: XCTestCase {
     
     lazy var signInRobot: SignInRobot = EarlGreyRobot()
     lazy var splashRobot: SplashScreenRobot = EarlGreyRobot()
+    lazy var howDoesItWorkScreenRobot: HowDoesItWorkScreenRobot = EarlGreyRobot()
 
     override func setUp() {
         self.splashRobot
@@ -42,9 +43,18 @@ class SignInScreenUITests: XCTestCase {
         self.signInRobot
                 .select(button: .howDoesItWork)
                 .validateOffSignInScreen()
+
+        self.howDoesItWorkScreenRobot
+                .validateOnHowDoesItWorkScreen()
+                .select(button: .back)
+                .validateOffHowDoesItWorkScreen()  // fails weird
+//
+//        self.signInRobot
+//                .validateOnSignInScreen()
     }
 
     func testEnterWords () {
-
+         self.signInRobot
+                 .enterValidPassPhraseWord()
     }
 }

@@ -13,45 +13,37 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import Foundation
 @testable import Toshi
-import XCTest
 
-// MARK: - Robot to deal with the Sign In With Passphrase page of the app
+// MARK: - Robot to deal with the how does it work screen which explains how login in works.
 
-protocol SignInRobot: BasicRobot { }
+protocol HowDoesItWorkScreenRobot: BasicRobot { }
 
-// MARK: The various buttons which are on the passphrase page
+// MARK: Buttons which can be selected on the how does it work screen
 
-enum SignInScreenButton {
+enum HowDoesItWorkScreenButton {
     case
-    back,
-    howDoesItWork,
-    signIn,
-    wordsLeft(words: Int)
-    
+    back
+
     var accessibilityLabel: String {
         switch self {
         case .back:
             return Localized("back_action_title")
-        case .howDoesItWork:
-            return Localized("passphrase_sign_in_explanation_title")
-        case .signIn:
-            return Localized("passphrase_sign_in_button")
-        case .wordsLeft(let words):
-            return LocalizedPlural("passphrase_sign_in_button_placeholder", for: words)
         }
     }
 }
 
 // MARK: - Default Implementation
 
-extension SignInRobot {
+extension HowDoesItWorkScreenRobot {
     
     // MARK: - Actions
     
-    func select(button: SignInScreenButton,
+    @discardableResult
+    func select(button: HowDoesItWorkScreenButton,
                 file: StaticString = #file,
-                line: UInt = #line) -> SignInRobot {
+                line: UInt = #line) -> HowDoesItWorkScreenRobot {
         tapButtonWith(accessibilityLabel: button.accessibilityLabel,
                       file: file,
                       line: line)
@@ -62,32 +54,21 @@ extension SignInRobot {
     // MARK: - Validators
     
     @discardableResult
-    func validateOnSignInScreen(file: StaticString = #file,
-                                line: UInt = #line) -> SignInRobot {
-        confirmViewVisibleWith(accessibilityLabel: Localized("passphrase_sign_in_title"),
+    func validateOnHowDoesItWorkScreen(file: StaticString = #file,
+                                line: UInt = #line) -> HowDoesItWorkScreenRobot {
+        confirmViewVisibleWith(accessibilityLabel: Localized("passphrase_sign_in_explanation_title"),
                                file: file,
                                line: line)
-        
         return self
     }
     
     @discardableResult
-    func validateOffSignInScreen(file: StaticString = #file,
-                                 line: UInt = #line) -> SignInRobot {
-        confirmViewGoneWith(accessibilityLabel: Localized("passphrase_sign_in_title"),
+    func validateOffHowDoesItWorkScreen(file: StaticString = #file,
+                                 line: UInt = #line) -> HowDoesItWorkScreenRobot {
+        confirmViewGoneWith(accessibilityLabel: Localized("passphrase_sign_in_explanation_title"),
                             file: file,
                             line: line)
         
-        return self
-    }
-
-    // MARK: - Type
-
-    @discardableResult
-    func enterValidPassPhraseWord(file: StaticString = #file,
-                                  line: UInt = #line) -> SignInRobot {
-        typeText("abandon", onViewWith: Localized("passphrase_sign_in_placeholder"), file: file, line: line)
-
         return self
     }
 }

@@ -95,6 +95,10 @@ protocol BasicRobot {
     func tapCellWith(accessibilityLabel: String,
                      file: StaticString,
                      line: UInt)
+
+    func typeText(_ text: String,
+                  onViewWith accessibilityLabel: String,
+                  file: StaticString, line: UInt)
 }
 
 extension BasicRobot {
