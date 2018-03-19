@@ -1001,6 +1001,7 @@
 		D197B329D1F28B5F7868DE4D /* ProfileEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197BDBBB0DE754639B7005B /* ProfileEditController.swift */; };
 		D197B35BF9744D2F37972747 /* EthereumAPIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B33D03FC3E507BE3B3C1 /* EthereumAPIClientTests.swift */; };
 		D197B3681093A4FBE3144B3C /* getHighBalance.json in Resources */ = {isa = PBXBuildFile; fileRef = D197B538677D9E831BA9AB3F /* getHighBalance.json */; };
+		D197B3754333741EC9165E36 /* SignInScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197BFD427B9507272D11B76 /* SignInScreenUITests.swift */; };
 		D197B3781644ABF575195A69 /* SofaCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B5AD370809E7D2EB3631 /* SofaCommand.swift */; };
 		D197B38DAA052C5A2FC57DA0 /* String+nsRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B695935159A20363BBF9 /* String+nsRange.swift */; };
 		D197B3CD97B238550A27A173 /* SofaCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D197B5AD370809E7D2EB3631 /* SofaCommand.swift */; };
@@ -1603,6 +1604,7 @@
 		D197BDA113837D7DCFE1A66F /* ExchangeRateAPIClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeRateAPIClientTests.swift; sourceTree = "<group>"; };
 		D197BDBBB0DE754639B7005B /* ProfileEditController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileEditController.swift; sourceTree = "<group>"; };
 		D197BFC186F1EEBDC8FD45B1 /* transactionSkeleton.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transactionSkeleton.json; sourceTree = "<group>"; };
+		D197BFD427B9507272D11B76 /* SignInScreenUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInScreenUITests.swift; sourceTree = "<group>"; };
 		D197BFD8FAC1FBE64984D60C /* StatusCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusCell.swift; sourceTree = "<group>"; };
 		DB569D0242764BCF23E2B76B /* libPods-CocoaPods-Tests_UI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaPods-Tests_UI.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEC66D9B224C045376BE4638 /* Pods-Tests_UI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests_UI.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests_UI/Pods-Tests_UI.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2064,6 +2066,7 @@
 				33C0342C1FFE6A1800A9C59C /* SplashScreenUITests.swift */,
 				33C034261FFE69E700A9C59C /* Info.plist */,
 				33C034361FFE6E0000A9C59C /* Tests_UI-Bridging-Header.h */,
+				D197BFD427B9507272D11B76 /* SignInScreenUITests.swift */,
 			);
 			path = Tests_UI;
 			sourceTree = "<group>";
@@ -3989,6 +3992,7 @@
 				33C034341FFE6A4500A9C59C /* EarlGreyRobot.swift in Sources */,
 				33C0343D1FFE7FF000A9C59C /* MyProfileRobot.swift in Sources */,
 				33C034321FFE6A3B00A9C59C /* SplashScreenRobot.swift in Sources */,
+				D197B3754333741EC9165E36 /* SignInScreenUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
