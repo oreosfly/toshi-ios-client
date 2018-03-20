@@ -116,12 +116,23 @@ extension SignInRobot {
         return self
     }
 
+    @discardableResult
+    func validateSignInEnabled(file: StaticString = #file,
+                                 line: UInt = #line) -> SignInRobot {
+        confirmButtonEnabled(accessibilityLabel: SignInScreenButton.signIn.accessibilityLabel,
+                file: file,
+                line: line)
+
+        return self
+    }
+
     // MARK: - Typing
 
     @discardableResult
-    func enterValidPassPhraseWord(file: StaticString = #file,
+    func enterValidPassPhraseWords(amount: Int, file: StaticString = #file,
                                   line: UInt = #line) -> SignInRobot {
-        typeText("abandon", onViewWith: Localized("passphrase_sign_in_placeholder"),
+
+        typeText(String(repeating: "abandon ", count: amount), onViewWith: Localized("passphrase_sign_in_placeholder"),
                 file: file,
                 line: line)
 
@@ -131,7 +142,7 @@ extension SignInRobot {
     @discardableResult
     func enterInvalidPassPhraseWord(file: StaticString = #file,
                                   line: UInt = #line) -> SignInRobot {
-        typeText("marijnisawesome", onViewWith: Localized("passphrase_sign_in_placeholder"),
+        typeText("marijn", onViewWith: Localized("passphrase_sign_in_placeholder"),
                 file: file,
                 line: line)
 

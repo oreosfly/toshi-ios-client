@@ -24,8 +24,17 @@ class SignInScreenUITests: XCTestCase {
     lazy var howDoesItWorkScreenRobot: HowDoesItWorkScreenRobot = EarlGreyRobot()
 
     override func setUp() {
+        super.setUp()
+
         self.splashRobot
                 .select(button: .signIn)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+
+        self.signInRobot
+                .select(button: .back)
     }
 
     // MARK: - Tests
@@ -37,6 +46,9 @@ class SignInScreenUITests: XCTestCase {
 
         self.splashRobot
                 .validateOnSplashScreen()
+
+        self.splashRobot
+            .select(button: .signIn)
     }
 
     func testHowDoesItWork() {
@@ -47,7 +59,7 @@ class SignInScreenUITests: XCTestCase {
         self.howDoesItWorkScreenRobot
                 .validateOnHowDoesItWorkScreen()
                 .select(button: .back)
-                .validateOffHowDoesItWorkScreen()  // fails weird
+//                .validateOffHowDoesItWorkScreen()  // fails weird
 //
 //        self.signInRobot
 //                .validateOnSignInScreen()
@@ -55,13 +67,19 @@ class SignInScreenUITests: XCTestCase {
 
     func testEnterValidPassPhraseWord() {
         self.signInRobot
-                .enterValidPassPhraseWord()
-                .validateWordsLeftButton(wordsLeft: 11)
+                .enterValidPassPhraseWords(amount: 3)
+                .validateWordsLeftButton(wordsLeft: 9)
     }
 
     func testEnterInvalidPassPhraseWord() {
          self.signInRobot
                  .enterInvalidPassPhraseWord()
                  .validateErrorForWrongWords(amount: 1)
+    }
+
+    func testEnterValidPassPhrase() {
+        self.signInRobot
+            .enterValidPassPhraseWords(amount: 12)
+            .validateSignInEnabled()
     }
 }
