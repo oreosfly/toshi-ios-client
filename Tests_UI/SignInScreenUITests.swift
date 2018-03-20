@@ -62,6 +62,6 @@ class SignInScreenUITests: XCTestCase {
     func testEnterInvalidPassPhraseWord() {
          self.signInRobot
                  .enterInvalidPassPhraseWord()
-
+                 .validateErrorForWrongWords(amount: 1)
     }
 }

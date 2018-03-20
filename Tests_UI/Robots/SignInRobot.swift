@@ -106,6 +106,16 @@ extension SignInRobot {
         return self
     }
 
+    @discardableResult
+    func validateErrorForWrongWords(amount: Int, file: StaticString = #file,
+                                 line: UInt = #line) -> SignInRobot {
+        confirmViewVisibleWith(accessibilityLabel: SingInScreenLabel.error(words: amount).accessibilityLabel,
+                file: file,
+                line: line)
+
+        return self
+    }
+
     // MARK: - Typing
 
     @discardableResult
