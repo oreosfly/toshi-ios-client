@@ -43,6 +43,18 @@ enum SignInScreenButton {
     }
 }
 
+enum SingInScreenLabel {
+    case
+    error(words: Int)
+
+    var accessibilityLabel: String {
+        switch self {
+        case .error(let words):
+            return LocalizedPlural("passphrase_sign_in_error", for: words)
+        }
+    }
+}
+
 // MARK: - Default Implementation
 
 extension SignInRobot {
@@ -81,12 +93,37 @@ extension SignInRobot {
         return self
     }
 
-    // MARK: - Type
+    @discardableResult
+    func validateWordsLeftButton(wordsLeft: Int, file: StaticString = #file,
+                                 line: UInt = #line) -> SignInRobot {
+        confirmViewVisibleWith(accessibilityLabel: SignInScreenButton.wordsLeft(words: wordsLeft).accessibilityLabel,
+                file: file,
+                line: line)
+        confirmButtonDisabled(accessibilityLabel: SignInScreenButton.wordsLeft(words: wordsLeft).accessibilityLabel,
+                file: file,
+                line: line)
+
+        return self
+    }
+
+    // MARK: - Typing
 
     @discardableResult
     func enterValidPassPhraseWord(file: StaticString = #file,
                                   line: UInt = #line) -> SignInRobot {
-        typeText("abandon", onViewWith: Localized("passphrase_sign_in_placeholder"), file: file, line: line)
+        typeText("abandon", onViewWith: Localized("passphrase_sign_in_placeholder"),
+                file: file,
+                line: line)
+
+        return self
+    }
+
+    @discardableResult
+    func enterInvalidPassPhraseWord(file: StaticString = #file,
+                                  line: UInt = #line) -> SignInRobot {
+        typeText("marijnisawesome", onViewWith: Localized("passphrase_sign_in_placeholder"),
+                file: file,
+                line: line)
 
         return self
     }

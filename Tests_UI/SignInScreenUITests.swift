@@ -53,8 +53,15 @@ class SignInScreenUITests: XCTestCase {
 //                .validateOnSignInScreen()
     }
 
-    func testEnterWords () {
+    func testEnterValidPassPhraseWord() {
+        self.signInRobot
+                .enterValidPassPhraseWord()
+                .validateWordsLeftButton(wordsLeft: 11)
+    }
+
+    func testEnterInvalidPassPhraseWord() {
          self.signInRobot
-                 .enterValidPassPhraseWord()
+                 .enterInvalidPassPhraseWord()
+
     }
 }

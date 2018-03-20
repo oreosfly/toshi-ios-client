@@ -96,8 +96,33 @@ protocol BasicRobot {
                      file: StaticString,
                      line: UInt)
 
+    /// Runs an action where the implementation's test framework types the input text on the view based on its accessibility label.
+    ///
+    /// - Parameters:
+    ///   - text: the text to type.
+    ///   - accessibilityLabel: The Accessibility Label of the view to type in. This would be read out loud to VoiceOver users.
+    ///   - file: The file from which this method is being called.
+    ///   - line: The line from which this method is being called.
     func typeText(_ text: String,
                   onViewWith accessibilityLabel: String,
+                  file: StaticString, line: UInt)
+
+    /// Runs an action where the implementation's test framework validates that a button is ensabled based on its accessibility identifier.
+    ///
+    /// - Parameters:
+    ///   - accessibilityLabel: The Accessibility Label of the button. This would be read out loud to VoiceOver users.
+    ///   - file: The file from which this method is being called.
+    ///   - line: The line from which this method is being called.
+    func confirmButtonEnabled(accessibilityLabel: String,
+                               file: StaticString, line: UInt)
+
+    /// Runs an action where the implementation's test framework validates that a button is disabled based on its accessibility identifier.
+    ///
+    /// - Parameters:
+    ///   - accessibilityLabel: The Accessibility Label of the button. This would be read out loud to VoiceOver users.
+    ///   - file: The file from which this method is being called.
+    ///   - line: The line from which this method is being called.
+    func confirmButtonDisabled(accessibilityLabel: String,
                   file: StaticString, line: UInt)
 }
 
@@ -116,7 +141,7 @@ extension BasicRobot {
     }
     
     // MARK: - Universal Validators
-    
+
     @discardableResult
     func validateTestAlertShowing(withMessage message: String,
                                   file: StaticString = #file,
@@ -140,5 +165,4 @@ extension BasicRobot {
         
         return self
     }
-    
 }

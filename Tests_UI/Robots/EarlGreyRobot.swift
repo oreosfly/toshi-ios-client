@@ -128,6 +128,18 @@ extension EarlGreyRobot: BasicRobot {
         viewWith(label: accessibilityLabel, file: file, line: line)
                 .perform(grey_typeText(text))
     }
+
+    func confirmButtonEnabled(accessibilityLabel: String,
+                              file: StaticString, line: UInt) {
+        viewWith(label: accessibilityLabel, file: file, line: line)
+                .assert(with: grey_enabled())
+    }
+    
+    func confirmButtonDisabled(accessibilityLabel: String,
+                              file: StaticString, line: UInt) {
+        viewWith(label: accessibilityLabel, file: file, line: line)
+                .assert(with: grey_not(grey_enabled()))
+    }
 }
 
 // MARK: - Mix-in Robots
