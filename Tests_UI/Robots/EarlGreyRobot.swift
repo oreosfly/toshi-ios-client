@@ -129,6 +129,11 @@ extension EarlGreyRobot: BasicRobot {
                 .perform(grey_typeText(text))
     }
 
+    func clearText(onViewWith accessibilityLabel: String, file: StaticString, line: UInt) {
+        viewWith(label: accessibilityLabel, file: file, line: line)
+                .perform(grey_clearText())
+    }
+
     func confirmButtonEnabled(accessibilityLabel: String,
                               file: StaticString, line: UInt) {
         viewWith(label: accessibilityLabel, file: file, line: line)

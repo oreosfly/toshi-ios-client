@@ -107,7 +107,10 @@ protocol BasicRobot {
                   onViewWith accessibilityLabel: String,
                   file: StaticString, line: UInt)
 
-    /// Runs an action where the implementation's test framework validates that a button is ensabled based on its accessibility identifier.
+    func clearText(onViewWith accessibilityLabel: String,
+                  file: StaticString, line: UInt)
+
+    /// Runs an action where the implementation's test framework validates that a button is enabled based on its accessibility identifier.
     ///
     /// - Parameters:
     ///   - accessibilityLabel: The Accessibility Label of the button. This would be read out loud to VoiceOver users.
