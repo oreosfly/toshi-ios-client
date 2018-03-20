@@ -140,9 +140,9 @@ extension SignInRobot {
     }
 
     @discardableResult
-    func enterInvalidPassPhraseWord(file: StaticString = #file,
+    func enterInvalidPassPhraseWords(amount: Int, file: StaticString = #file,
                                   line: UInt = #line) -> SignInRobot {
-        typeText("marijn", onViewWith: Localized("passphrase_sign_in_placeholder"),
+        typeText(String(repeating: "marijn ", count: amount), onViewWith: Localized("passphrase_sign_in_placeholder"),
                 file: file,
                 line: line)
 
