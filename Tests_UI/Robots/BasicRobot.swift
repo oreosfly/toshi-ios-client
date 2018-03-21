@@ -127,6 +127,12 @@ protocol BasicRobot {
                   onViewWith accessibilityLabel: String,
                   file: StaticString, line: UInt)
 
+    /// Runs an action where the implementation's test framework clears the input text on the text field based on its placeholder.
+    ///
+    /// - Parameters:
+    ///   - placeholder: The placeholder of the text field to clear the text of.
+    ///   - file: The file from which this method is being called.
+    ///   - line: The line from which this method is being called.
     func clearText(onViewWith placeholder: String,
                   file: StaticString, line: UInt)
 

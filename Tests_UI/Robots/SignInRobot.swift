@@ -162,6 +162,8 @@ extension SignInRobot {
     @discardableResult
     func clearPassPhrase(file: StaticString = #file,
                                   line: UInt = #line) -> SignInRobot {
+
+
         clearText(onViewWith: Localized("passphrase_sign_in_placeholder"),
                 file: file,
                 line: line)
