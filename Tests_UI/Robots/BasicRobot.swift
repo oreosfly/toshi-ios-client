@@ -45,6 +45,16 @@ protocol BasicRobot {
     func confirmViewVisibleWith(accessibilityIdentifier: AccessibilityIdentifier,
                                 file: StaticString,
                                 line: UInt)
+
+    /// Runs an action where the implementation's test framework validates that a view is presently visible based on its placeHolder.
+    ///
+    /// - Parameters:
+    ///   - placeHolder: The placeHolder of the view to look for.
+    ///   - file: The file from which this method is being called.
+    ///   - line: The line from which this method is being called.
+    func confirmTextFieldVisibleWith(placeHolder: String,
+                                file: StaticString,
+                                line: UInt)
     
     /// Runs an action where the implementation's test framework validates that a view is not presently visible based on its accessibility label.
     ///
@@ -65,7 +75,17 @@ protocol BasicRobot {
     func confirmViewGoneWith(accessibilityIdentifier: AccessibilityIdentifier,
                              file: StaticString,
                              line: UInt)
-    
+
+    /// Runs an action where the implementation's test framework validates that a text field is not presently visible based on its placeholder.
+    ///
+    /// - Parameters:
+    ///   - placeHolder: The placeholder of the text field to look for.
+    ///   - file: The file from which this method is being called.
+    ///   - line: The line from which this method is being called.
+    func confirmTextFieldGoneWith(placeHolder: String,
+                             file: StaticString,
+                             line: UInt)
+
     // MARK: - Tapping
     
     /// Runs an action where an implementation's test framework taps on a generic view based on its accessibility label.
@@ -107,7 +127,7 @@ protocol BasicRobot {
                   onViewWith accessibilityLabel: String,
                   file: StaticString, line: UInt)
 
-    func clearText(onViewWith accessibilityLabel: String,
+    func clearText(onViewWith placeholder: String,
                   file: StaticString, line: UInt)
 
     /// Runs an action where the implementation's test framework validates that a button is enabled based on its accessibility identifier.
