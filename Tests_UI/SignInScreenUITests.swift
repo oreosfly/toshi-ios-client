@@ -85,7 +85,6 @@ class SignInScreenUITests: XCTestCase {
 
     func testEnterInvalidPassPhraseAndRemove() {
         self.signInRobot
-                .clearPassPhrase()
                 .enterInvalidPassPhraseWords(amount: 1)
                 .validateErrorForWrongWords(amount: 1)
                 .clearPassPhrase()

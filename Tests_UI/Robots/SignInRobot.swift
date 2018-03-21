@@ -163,8 +163,7 @@ extension SignInRobot {
     func clearPassPhrase(file: StaticString = #file,
                                   line: UInt = #line) -> SignInRobot {
 
-
-        clearText(onViewWith: Localized("passphrase_sign_in_placeholder"),
+        typeText(String(repeating: "\u{8}", count: 6), onViewWith: "marijn",
                 file: file,
                 line: line)
 
