@@ -139,7 +139,7 @@ extension EarlGreyRobot: BasicRobot {
         cellWith(label: accessibilityLabel, file: file, line: line)
             .perform(grey_tap())
     }
-    
+
     func tapViewWith(accessibilityLabel: String, file: StaticString, line: UInt) {
         viewWith(label: accessibilityLabel, file: file, line: line)
             .perform(grey_tap())
