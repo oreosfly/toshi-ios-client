@@ -83,6 +83,20 @@ class EarlGreyRobot {
                          onElementWith: grey_kindOfClass(UITableView.self))
 
     }
+
+    private func itemWith(label: String,
+                          file: StaticString,
+                          line: UInt) -> GREYElementInteraction {
+        return self.earlFromFile(file: file, line: line)
+            .selectElement(with: grey_allOf([
+                grey_descendant(grey_accessibilityLabel(label)),
+                grey_sufficientlyVisible(),
+                grey_kindOfClass(UICollectionViewCell.self)
+            ]))
+            .usingSearch(grey_scrollInDirection(.down, 100),
+                         onElementWith: grey_kindOfClass(UICollectionViewCell.self))
+
+    }
     
     private func viewWith(identifier: String,
                           file: StaticString,
