@@ -59,9 +59,7 @@ class EarlGreyRobot {
             .atIndex(0)
     }
 
-    private func textFieldWith(placeHolder: String,
-                            file: StaticString,
-                            line: UInt) -> GREYElementInteraction {
+    private func textFieldWith(placeHolder: String, file: StaticString, line: UInt) -> GREYElementInteraction {
         return earlFromFile(file: file, line: line)
             .selectElement(with: grey_allOf([
                 grey_kindOfClass(UITextField.self),
@@ -124,7 +122,7 @@ extension EarlGreyRobot: BasicRobot {
             .assert(with: grey_sufficientlyVisible())
     }
 
-    func confirmTextFieldVisibleWith(placeHolder: String, file: StaticString, line: UInt)  {
+    func confirmTextFieldVisibleWith(placeHolder: String, file: StaticString, line: UInt) {
         textFieldWith(placeHolder: placeHolder, file: file, line: line)
                 .assert(with: grey_sufficientlyVisible())
     }
@@ -169,14 +167,12 @@ extension EarlGreyRobot: BasicRobot {
                 .perform(grey_clearText())
     }
 
-    func confirmButtonEnabled(accessibilityLabel: String,
-                              file: StaticString, line: UInt) {
+    func confirmButtonEnabled(accessibilityLabel: String, file: StaticString, line: UInt) {
         viewWith(label: accessibilityLabel, file: file, line: line)
                 .assert(with: grey_enabled())
     }
     
-    func confirmButtonDisabled(accessibilityLabel: String,
-                              file: StaticString, line: UInt) {
+    func confirmButtonDisabled(accessibilityLabel: String, file: StaticString, line: UInt) {
         viewWith(label: accessibilityLabel, file: file, line: line)
                 .assert(with: grey_not(grey_enabled()))
     }
@@ -189,7 +185,6 @@ extension EarlGreyRobot: SplashScreenRobot { /* mix-in */ }
 extension EarlGreyRobot: SignInRobot { /* mix-in */ }
 extension EarlGreyRobot: TabBarRobot { /* mix-in */ }
 extension EarlGreyRobot: HowDoesItWorkScreenRobot { /* mix-in */ }
-
 
 /**
 *  Matcher for UI element with the provided accessibility @c label.
@@ -209,4 +204,3 @@ func matcher(forPlaceholder placeholder: String) -> GREYMatcher {
         description.appendText("has placeholder \(placeholder)")
     })
 }
-

@@ -54,8 +54,7 @@ extension HowDoesItWorkScreenRobot {
     // MARK: - Validators
     
     @discardableResult
-    func validateOnHowDoesItWorkScreen(file: StaticString = #file,
-                                line: UInt = #line) -> HowDoesItWorkScreenRobot {
+    func validateOnHowDoesItWorkScreen(file: StaticString = #file, line: UInt = #line) -> HowDoesItWorkScreenRobot {
         confirmViewVisibleWith(accessibilityLabel: Localized("passphrase_sign_in_explanation_title"),
                                file: file,
                                line: line)
@@ -63,8 +62,7 @@ extension HowDoesItWorkScreenRobot {
     }
     
     @discardableResult
-    func validateOffHowDoesItWorkScreen(file: StaticString = #file,
-                                 line: UInt = #line) -> HowDoesItWorkScreenRobot {
+    func validateOffHowDoesItWorkScreen(file: StaticString = #file, line: UInt = #line) -> HowDoesItWorkScreenRobot {
         confirmViewGoneWith(accessibilityLabel: Localized("passphrase_sign_in_explanation_title"),
                             file: file,
                             line: line)

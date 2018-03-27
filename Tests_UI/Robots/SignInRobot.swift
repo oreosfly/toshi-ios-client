@@ -61,6 +61,7 @@ extension SignInRobot {
     
     // MARK: - Actions
     
+    @discardableResult
     func select(button: SignInScreenButton,
                 file: StaticString = #file,
                 line: UInt = #line) -> SignInRobot {
@@ -107,8 +108,7 @@ extension SignInRobot {
     }
 
     @discardableResult
-    func validateErrorForWrongWords(amount: Int, file: StaticString = #file,
-                                 line: UInt = #line) -> SignInRobot {
+    func validateErrorForWrongWords(amount: Int, file: StaticString = #file, line: UInt = #line) -> SignInRobot {
         confirmViewVisibleWith(accessibilityLabel: SingInScreenLabel.error(words: amount).accessibilityLabel,
                 file: file,
                 line: line)
@@ -117,8 +117,7 @@ extension SignInRobot {
     }
 
     @discardableResult
-    func validateErrorIsNotVisible(amount: Int, file: StaticString = #file,
-                                 line: UInt = #line) -> SignInRobot {
+    func validateErrorIsNotVisible(amount: Int, file: StaticString = #file, line: UInt = #line) -> SignInRobot {
         confirmViewGoneWith(accessibilityLabel: SingInScreenLabel.error(words: amount).accessibilityLabel,
                 file: file,
                 line: line)
@@ -128,7 +127,7 @@ extension SignInRobot {
 
     @discardableResult
     func validateSignInEnabled(file: StaticString = #file, line: UInt = #line) -> SignInRobot {
-        confirmViewVisibleWith(accessibilityLabel:  SignInScreenButton.signIn.accessibilityLabel, file: file, line: line)
+        confirmViewVisibleWith(accessibilityLabel: SignInScreenButton.signIn.accessibilityLabel, file: file, line: line)
         confirmButtonEnabled(accessibilityLabel: SignInScreenButton.signIn.accessibilityLabel,
                 file: file,
                 line: line)
