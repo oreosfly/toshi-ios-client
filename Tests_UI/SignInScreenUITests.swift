@@ -59,10 +59,10 @@ class SignInScreenUITests: XCTestCase {
         self.howDoesItWorkScreenRobot
                 .validateOnHowDoesItWorkScreen()
                 .select(button: .back)
-//                .validateOffHowDoesItWorkScreen()  // fails weird
-//
-//        self.signInRobot
-//                .validateOnSignInScreen()
+                .validateOffHowDoesItWorkScreen()  // fails weird
+
+        self.signInRobot
+                .validateOnSignInScreen()
     }
 
     func testEnterValidPassPhraseWord() {
@@ -83,11 +83,22 @@ class SignInScreenUITests: XCTestCase {
             .validateSignInEnabled()
     }
 
-    func testEnterInvalidPassPhraseAndRemove() {
+    func testEnterInvalidPassPhraseWordAndRemove() {
         self.signInRobot
                 .enterInvalidPassPhraseWords(amount: 1)
                 .validateErrorForWrongWords(amount: 1)
                 .clearPassPhrase()
                 .validateErrorIsNotVisible(amount: 1)
+    }
+
+    func testEnterValidPassPhraseAndOneInvalidPassPhraseWordAndRemove() {
+        self.signInRobot
+                .enterValidPassPhraseWords(amount: 10)
+                .enterInvalidPassPhraseWords(amount: 1)
+                .validateErrorForWrongWords(amount: 1)
+                .clearPassPhrase()
+                .validateErrorIsNotVisible(amount: 1)
+                .enterValidPassPhraseWords(amount: 2)
+                .validateSignInEnabled()
     }
 }

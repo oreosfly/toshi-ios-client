@@ -124,7 +124,7 @@ protocol BasicRobot {
     ///   - file: The file from which this method is being called.
     ///   - line: The line from which this method is being called.
     func typeText(_ text: String,
-                  onViewWith accessibilityLabel: String,
+                  onViewWith accessibilityIdentifier: String,
                   file: StaticString, line: UInt)
 
     /// Runs an action where the implementation's test framework clears the input text on the text field based on its placeholder.

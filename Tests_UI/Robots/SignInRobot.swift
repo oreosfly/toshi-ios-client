@@ -127,8 +127,8 @@ extension SignInRobot {
     }
 
     @discardableResult
-    func validateSignInEnabled(file: StaticString = #file,
-                                 line: UInt = #line) -> SignInRobot {
+    func validateSignInEnabled(file: StaticString = #file, line: UInt = #line) -> SignInRobot {
+        confirmViewVisibleWith(accessibilityLabel:  SignInScreenButton.signIn.accessibilityLabel, file: file, line: line)
         confirmButtonEnabled(accessibilityLabel: SignInScreenButton.signIn.accessibilityLabel,
                 file: file,
                 line: line)
@@ -139,10 +139,9 @@ extension SignInRobot {
     // MARK: - Typing
 
     @discardableResult
-    func enterValidPassPhraseWords(amount: Int, file: StaticString = #file,
-                                  line: UInt = #line) -> SignInRobot {
+    func enterValidPassPhraseWords(amount: Int, file: StaticString = #file, line: UInt = #line) -> SignInRobot {
 
-        typeText(String(repeating: "abandon ", count: amount), onViewWith: Localized("passphrase_sign_in_placeholder"),
+        typeText(String(repeating: "ask ", count: amount), onViewWith: "login_textField",
                 file: file,
                 line: line)
 
@@ -150,9 +149,8 @@ extension SignInRobot {
     }
 
     @discardableResult
-    func enterInvalidPassPhraseWords(amount: Int, file: StaticString = #file,
-                                  line: UInt = #line) -> SignInRobot {
-        typeText(String(repeating: "marijn ", count: amount), onViewWith: Localized("passphrase_sign_in_placeholder"),
+    func enterInvalidPassPhraseWords(amount: Int, file: StaticString = #file, line: UInt = #line) -> SignInRobot {
+        typeText(String(repeating: "marijn ", count: amount), onViewWith: "login_textField",
                 file: file,
                 line: line)
 
@@ -160,10 +158,9 @@ extension SignInRobot {
     }
 
     @discardableResult
-    func clearPassPhrase(file: StaticString = #file,
-                                  line: UInt = #line) -> SignInRobot {
+    func clearPassPhrase(file: StaticString = #file, line: UInt = #line) -> SignInRobot {
 
-        typeText(String(repeating: "\u{8}", count: 6), onViewWith: "marijn",
+        typeText(String(repeating: "\u{8}", count: 7), onViewWith: "login_textField",
                 file: file,
                 line: line)
 
