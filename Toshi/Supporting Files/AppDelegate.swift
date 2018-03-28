@@ -84,6 +84,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
 
         guard TSAccountManager.isRegistered() else { return }
+
+        // We need to close open socket while in background to not run expensive process
+        // since we need the app to awake in background when PN received
+        TSSocketManager.requestSocketClosed()
+
         self.activateScreenProtection()
     }
 
