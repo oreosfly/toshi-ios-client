@@ -232,8 +232,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 
-        Navigator.tabbarController?.triggerWalletTabReloadIfNeeded(basedOn: userInfo)
-        completionHandler(.noData)
+        DispatchQueue.main.async {
+            self.pnReceived += 1
+
+            let content = UNMutableNotificationContent()
+            content.title = "Received remote notification"
+            content.body = "Launching message fetch job..."
+            content.sound = UNNotificationSound(named: "PN.m4a")
+
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.3, repeats: false)
+            let request = UNNotificationRequest(identifier: content.title, content: content, trigger: trigger)
+
+            let center = UNUserNotificationCenter.current()
+            center.add(request) { _ in
+
+            }
+        }
+
         DispatchQueue.main.asyncAfter(seconds: 20, execute: {
             completionHandler(.newData)
         })
