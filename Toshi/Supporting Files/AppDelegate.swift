@@ -229,6 +229,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         Navigator.tabbarController?.triggerWalletTabReloadIfNeeded(basedOn: userInfo)
         completionHandler(.noData)
+        DispatchQueue.main.asyncAfter(seconds: 20, execute: {
+            completionHandler(.newData)
+        })
+
+        SessionManager.shared.messageFetcherJob?.run(completion: {
+
+        })
     }
 
     private func updateRemoteNotificationsCredentials() {
