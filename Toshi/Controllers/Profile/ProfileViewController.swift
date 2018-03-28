@@ -510,19 +510,22 @@ final class ProfileViewController: DisappearingNavBarViewController {
     }
     
     // MARK: Action sheet targets
-    
-    private func didSelectBlockedState(_ shouldBeBlocked: Bool) {
-        if shouldBeBlocked {
-            presentBlockConfirmationAlert()
-        } else {
-            unblockUser()
-        }
+         private func didSelectBlockedState(_ shouldBeBlocked: Bool) {
+//        if shouldBeBlocked {
+//            presentBlockConfirmationAlert()
+//        } else {
+            //            unblockUser()
+            //        }
+
+            let thread = ChatInteractor.getOrCreateThread(for: profile.address)
+            thread.updateWithMuted(until: Date.distantFuture)
+            print("THREAD muted: \(thread)")
     }
     
     private func didSelectReportUser() {
-        self.idAPIClient.reportUser(address: profile.address) { [weak self] success, error in
-            self?.presentReportUserFeedbackAlert(success, message: error?.description)
-        }
+        let thread = ChatInteractor.getOrCreateThread(for: profile.address)
+        thread.updateWithMuted(until: nil)
+        print("THREAD UNMUTED: \(thread)")
     }
     
     private func didSelectFavoriteState(_ shouldBeFavorited: Bool) {
