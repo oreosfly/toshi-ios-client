@@ -233,8 +233,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 
         DispatchQueue.main.async {
-            self.pnReceived += 1
-
             let content = UNMutableNotificationContent()
             content.title = "Received remote notification"
             content.body = "Launching message fetch job..."
