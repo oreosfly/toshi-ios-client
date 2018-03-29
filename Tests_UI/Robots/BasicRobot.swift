@@ -130,18 +130,11 @@ protocol BasicRobot {
     /// Runs an action where the implementation's test framework validates that a button is enabled based on its accessibility identifier.
     ///
     /// - Parameters:
+    ///   - shouldBeEnabled: Bool that signifies to check if the button is enabled or disabled.
     ///   - accessibilityLabel: The Accessibility Label of the button. This would be read out loud to VoiceOver users.
     ///   - file: The file from which this method is being called.
     ///   - line: The line from which this method is being called.
-    func confirmButtonEnabled(accessibilityLabel: String, file: StaticString, line: UInt)
-
-    /// Runs an action where the implementation's test framework validates that a button is disabled based on its accessibility identifier.
-    ///
-    /// - Parameters:
-    ///   - accessibilityLabel: The Accessibility Label of the button. This would be read out loud to VoiceOver users.
-    ///   - file: The file from which this method is being called.
-    ///   - line: The line from which this method is being called.
-    func confirmButtonDisabled(accessibilityLabel: String, file: StaticString, line: UInt)
+    func confirmButtonEnabled(_ shouldBeEnabled: Bool, accessibilityLabel: String, file: StaticString, line: UInt)
 }
 
 extension BasicRobot {

@@ -18,25 +18,13 @@ import Foundation
 
 // MARK: - Robot to deal with the how does it work screen which explains how login in works.
 
-protocol HowDoesItWorkScreenRobot: BasicRobot { }
+protocol HowDoesItWorkScreenRobot: BasicRobot {}
 
-// MARK: Buttons which can be selected on the how does it work screen
-
-enum HowDoesItWorkScreenButton {
-    case
-    back
-
-    var accessibilityLabel: String {
-        switch self {
-        case .back:
-            return Localized.back_action_title
-        }
-    }
-}
 
 // MARK: - Default Implementation
 
 extension HowDoesItWorkScreenRobot {
+    var backAccessibilityLabel = Localized.back_action_title
     
     // MARK: - Actions
     
@@ -44,7 +32,7 @@ extension HowDoesItWorkScreenRobot {
     func select(button: HowDoesItWorkScreenButton,
                 file: StaticString = #file,
                 line: UInt = #line) -> HowDoesItWorkScreenRobot {
-        tapButtonWith(accessibilityLabel: button.accessibilityLabel,
+        tapButtonWith(accessibilityLabel: backAccessibilityLabel,
                       file: file,
                       line: line)
         

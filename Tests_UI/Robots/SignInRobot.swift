@@ -43,15 +43,37 @@ enum SignInScreenButton {
     }
 }
 
-enum SingInScreenLabel {
+enum SignInScreenPhrases {
     case
+    valid,
+    invalid
+
+    var phrase: String {
+        switch self {
+            case .valid:
+                return "ask "
+            case .invalid:
+                "marijn "
+        }
+    }
+}
+
+enum SignInScreenView {
+    case
+    passphraseInputView,
     error(words: Int)
 
     var accessibilityLabel: String {
         switch self {
         case .error(let words):
             return LocalizedPlural.passphrase_sign_in_error(for: words)
-        }
+        default: break
+    }
+    var accessibilityIdentifier: String {
+        switch self {
+        case .passphraseInputView(let words):
+            return LocalizedPlural.login_textField
+        default: break
     }
 }
 
@@ -140,7 +162,7 @@ extension SignInRobot {
     @discardableResult
     func enterValidPassPhraseWords(amount: Int, file: StaticString = #file, line: UInt = #line) -> SignInRobot {
 
-        typeText(String(repeating: "ask ", count: amount), onViewWith: "login_textField",
+        typeText(String(repeating: SignInScreenPhrases.valid.phrase, count: amount), onViewWith: SignInScreenView.passphraseInputView.accessibilityIdentifier,
                 file: file,
                 line: line)
 
@@ -149,7 +171,7 @@ extension SignInRobot {
 
     @discardableResult
     func enterInvalidPassPhraseWords(amount: Int, file: StaticString = #file, line: UInt = #line) -> SignInRobot {
-        typeText(String(repeating: "marijn ", count: amount), onViewWith: "login_textField",
+        typeText(String(repeating: SignInScreenPhrases.invalid.phrase, count: amount), onViewWith: SignInScreenView.passphraseInputView.accessibilityIdentifier,
                 file: file,
                 line: line)
 
@@ -159,7 +181,7 @@ extension SignInRobot {
     @discardableResult
     func clearPassPhrase(file: StaticString = #file, line: UInt = #line) -> SignInRobot {
 
-        typeText(String(repeating: "\u{8}", count: 7), onViewWith: "login_textField",
+        typeText(String(repeating: "\u{8}", count: 7), onViewWith: SignInScreenView.passphraseInputView.accessibilityIdentifier,
                 file: file,
                 line: line)
 

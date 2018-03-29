@@ -162,19 +162,17 @@ extension EarlGreyRobot: BasicRobot {
             .perform(grey_typeText(text))
     }
 
-    func clearText(onViewWith placeholder: String, file: StaticString, line: UInt) {
+    func clearText(onTextFieldWith placeholder: String, file: StaticString, line: UInt) {
         textFieldWith(placeHolder: placeholder, file: file, line: line)
                 .perform(grey_clearText())
     }
 
-    func confirmButtonEnabled(accessibilityLabel: String, file: StaticString, line: UInt) {
-        viewWith(label: accessibilityLabel, file: file, line: line)
-                .assert(with: grey_enabled())
-    }
-    
     func confirmButtonDisabled(accessibilityLabel: String, file: StaticString, line: UInt) {
-        viewWith(label: accessibilityLabel, file: file, line: line)
-                .assert(with: grey_not(grey_enabled()))
+        if enabled {
+            viewWith(label: accessibilityLabel, file: file, line: line).assert(with: grey_enabled())
+        } else {
+            viewWith(label: accessibilityLabel, file: file, line: line).assert(with: grey_not(grey_enabled()))
+        }
     }
 }
 
