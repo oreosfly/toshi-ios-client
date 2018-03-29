@@ -49,7 +49,6 @@ enum AssetCatalogItem: String, StringCaseListable {
     tab3,
     tab4,
     tab5,
-    test,
     TGAttachButton,
     token_placeholder,
     web_back,
@@ -152,8 +151,6 @@ enum ImageAsset {
     static let tab4 = AssetCatalogItem.tab4.image
 
     static let tab5 = AssetCatalogItem.tab5.image
-
-    static let test = AssetCatalogItem.test.image
 
     static let TGAttachButton = AssetCatalogItem.TGAttachButton.image
 
