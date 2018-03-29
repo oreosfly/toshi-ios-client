@@ -16,7 +16,7 @@
 import Foundation
 
 protocol PaymentConfirmationViewControllerDelegate: class {
-    func paymentConfirmationViewControllerFinished(on controller: PaymentConfirmationViewController, parameters: [String: Any], transactionHash: String?, error: ToshiError?)
+    func paymentConfirmationViewControllerFinished(on controller: PaymentConfirmationViewController, parameters: [String: Any], transactionHash: String?, recipientInfo: UserInfo?, error: ToshiError?)
     func paymentConfirmationViewControllerDidCancel(_ controller: PaymentConfirmationViewController)
 }
 
@@ -39,6 +39,7 @@ final class PaymentConfirmationViewController: UIViewController {
     private let paymentManager: PaymentManager
 
     private var recipientType: RecipientType
+    private var recipientInfo: UserInfo?
     private let shouldSendSignedTransaction: Bool
 
     private let parameters: [String: Any]
@@ -47,7 +48,7 @@ final class PaymentConfirmationViewController: UIViewController {
 
     private lazy var avatarImageView: AvatarImageView = {
         let imageView = AvatarImageView()
-        imageView.image = UIImage(named: "avatar-placeholder")
+        imageView.image = ImageAsset.avatar_placeholder
 
         return imageView
     }()
@@ -66,10 +67,10 @@ final class PaymentConfirmationViewController: UIViewController {
         switch recipientType {
         case .user:
             view.textAlignment = .center
-            view.text = Localized("confirmation_recipient")
+            view.text = Localized.confirmation_recipient
         case .dapp:
             view.textAlignment = .left
-            view.text = Localized("confirmation_dapp")
+            view.text = Localized.confirmation_dapp
         }
 
         return view
@@ -162,7 +163,7 @@ final class PaymentConfirmationViewController: UIViewController {
         view.titleLabel?.adjustsFontForContentSizeCategory = true
         view.setTitleColor(Theme.tintColor, for: .normal)
         view.addTarget(self, action: #selector(cancelItemTapped), for: .touchUpInside)
-        view.setTitle(Localized("cancel_action_title"), for: .normal)
+        view.setTitle(Localized.cancel_action_title, for: .normal)
 
         return view
     }()
@@ -178,7 +179,7 @@ final class PaymentConfirmationViewController: UIViewController {
         view.textAlignment = .center
         view.adjustsFontForContentSizeCategory = true
 
-        view.text = Localized("confirmation_fetching_estimated_network_fees")
+        view.text = Localized.confirmation_fetching_estimated_network_fees
 
         return view
     }()
@@ -193,7 +194,7 @@ final class PaymentConfirmationViewController: UIViewController {
 
     private lazy var payButton: ActionButton = {
         let button = ActionButton(margin: 15)
-        button.title = Localized("confirmation_pay")
+        button.title = Localized.confirmation_pay
         button.addTarget(self, action: #selector(didTapPayButton), for: .touchUpInside)
 
         return button
@@ -207,7 +208,7 @@ final class PaymentConfirmationViewController: UIViewController {
         view.textAlignment = .center
         view.adjustsFontForContentSizeCategory = true
 
-        view.text = Localized("confirmation_fetching_balance")
+        view.text = Localized.confirmation_fetching_balance
 
         return view
     }()
@@ -239,7 +240,7 @@ final class PaymentConfirmationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = Localized("confirmation_title")
+        title = Localized.confirmation_title
         addSubviewsAndConstraints()
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelItemTapped))
@@ -489,6 +490,7 @@ final class PaymentConfirmationViewController: UIViewController {
             return
         case .user:
             IDAPIClient.shared.findUserWithPaymentAddress(address) { [weak self] user, _ in
+                self?.recipientInfo = user?.userInfo
                 self?.recipientType = .user(info: user?.userInfo)
                 self?.displayRecipientDetails()
             }
@@ -515,14 +517,14 @@ final class PaymentConfirmationViewController: UIViewController {
         if isSufficient {
             UIView.animate(withDuration: 0.2) {
                 self.balanceLabel.textColor = Theme.lightGreyTextColor
-                self.balanceLabel.text = String(format: Localized("confirmation_your_balance"), balanceString)
+                self.balanceLabel.text = String(format: Localized.confirmation_your_balance, balanceString)
 
                 self.payButton.isEnabled = true
             }
         } else {
             UIView.animate(withDuration: 0.2) {
                 self.balanceLabel.textColor = Theme.errorColor
-                self.balanceLabel.text = String(format: Localized("confirmation_insufficient_balance"), balanceString)
+                self.balanceLabel.text = String(format: Localized.confirmation_insufficient_balance, balanceString)
 
                 self.payButton.isEnabled = false
             }
@@ -557,9 +559,9 @@ final class PaymentConfirmationViewController: UIViewController {
             weakSelf.payButton.hideSpinner()
 
             guard error == nil else {
-                let alert = UIAlertController(title: Localized("transaction_error_message"), message: (error?.description ?? ToshiError.genericError.description), preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: Localized("alert-ok-action-title"), style: .default, handler: { _ in
-                    weakSelf.delegate?.paymentConfirmationViewControllerFinished(on: weakSelf, parameters: weakSelf.paymentManager.parameters, transactionHash: transactionHash, error: error)
+                let alert = UIAlertController(title: Localized.transaction_error_message, message: (error?.description ?? ToshiError.genericError.description), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: Localized.alert_ok_action_title, style: .default, handler: { _ in
+                    weakSelf.delegate?.paymentConfirmationViewControllerFinished(on: weakSelf, parameters: weakSelf.paymentManager.parameters, transactionHash: transactionHash, recipientInfo: weakSelf.recipientInfo, error: error)
                 }))
 
                 Navigator.presentModally(alert)
@@ -567,7 +569,7 @@ final class PaymentConfirmationViewController: UIViewController {
                 return
             }
 
-            weakSelf.delegate?.paymentConfirmationViewControllerFinished(on: weakSelf, parameters: weakSelf.paymentManager.parameters, transactionHash: transactionHash, error: error)
+            weakSelf.delegate?.paymentConfirmationViewControllerFinished(on: weakSelf, parameters: weakSelf.paymentManager.parameters, transactionHash: transactionHash, recipientInfo: weakSelf.recipientInfo, error: error)
         }
     }
 
@@ -576,7 +578,7 @@ final class PaymentConfirmationViewController: UIViewController {
         if shouldSendSignedTransaction {
             sendPayment()
         } else {
-            self.delegate?.paymentConfirmationViewControllerFinished(on: self, parameters: self.paymentManager.parameters, transactionHash: "", error: nil)
+            self.delegate?.paymentConfirmationViewControllerFinished(on: self, parameters: self.paymentManager.parameters, transactionHash: "", recipientInfo: recipientInfo, error: nil)
         }
     }
 }

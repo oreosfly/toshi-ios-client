@@ -188,7 +188,7 @@ final class DappsDataSource {
                     var items = category.dapps.map { DappsDataSourceItem(type: .dappFront, dapp: $0) }
 
                     if index == frontPage.categories.count - 1 {
-                        items.append(DappsDataSourceItem(type: .seeAll, title: Localized("dapps-see-all-button-title")))
+                        items.append(DappsDataSourceItem(type: .seeAll, title: Localized.dapps_see_all_button_title))
                     }
 
                     fetchedDappsSections.append(DappsDataSourceSection(name: frontPage.categoriesInfo[category.categoryId], categoryId: category.categoryId, items: items))
@@ -219,7 +219,9 @@ final class DappsDataSource {
             guard let strongSelf = self, let strongOperation = weakOperation else { return }
 
             var results: [DappsDataSourceSection] = []
-            results.append(strongSelf.resultsForSearchText(strongSelf.queryData.searchText))
+            if let section = strongSelf.resultsForSearchText(strongSelf.queryData.searchText) {
+                results.append(section)
+            }
 
             DirectoryAPIClient.shared.getQueriedDapps(queryData: strongSelf.queryData, completion: { queriedResults, error in
 
@@ -241,7 +243,7 @@ final class DappsDataSource {
                     return DappsDataSourceItem(type: .dappSearched, dapp: dapp)
                 }), !items.isEmpty {
                     strongSelf.fetchedDappsItems.append(contentsOf: items)
-                    results.append(DappsDataSourceSection(name: Localized("dapps-section-title"), items: strongSelf.fetchedDappsItems))
+                    results.append(DappsDataSourceSection(name: Localized.dapps_section_title, items: strongSelf.fetchedDappsItems))
                 }
 
                 guard !strongOperation.isCancelled else { return }
@@ -263,7 +265,7 @@ final class DappsDataSource {
         reloadOperationQueue.addOperation(operation)
     }
 
-    func resultsForSearchText(_ searchText: String) -> DappsDataSourceSection {
+    func resultsForSearchText(_ searchText: String) -> DappsDataSourceSection? {
         var items: [DappsDataSourceItem] = []
 
         // Go to URL item
@@ -280,11 +282,22 @@ final class DappsDataSource {
             items.append(item)
         }
 
+        guard items.count > 0 else { return nil }
+
         return DappsDataSourceSection(items: items)
     }
 
     func adjustToSearchText(_ searchText: String) {
-        content = [self.resultsForSearchText(searchText)]
+        guard let searchSection = resultsForSearchText(searchText) else { return }
+
+        // We should not remove previously shown results until search response comes, here we should change only first section if it is Search with Google and Url
+        if var existingSearchSection = content.first, existingSearchSection.categoryId == nil, existingSearchSection.name == nil {
+            existingSearchSection.items = searchSection.items
+            content[0] = existingSearchSection
+        } else {
+            content = [searchSection]
+        }
+
         delegate?.dappsDataSourcedidReload(self)
     }
 

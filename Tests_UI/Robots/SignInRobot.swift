@@ -32,13 +32,13 @@ enum SignInScreenButton {
     var accessibilityLabel: String {
         switch self {
         case .back:
-            return Localized("back_action_title")
+            return Localized.back_action_title
         case .howDoesItWork:
-            return Localized("passphrase_sign_in_explanation_title")
+            return Localized.passphrase_sign_in_explanation_title
         case .signIn:
-            return Localized("passphrase_sign_in_button")
+            return Localized.passphrase_sign_in_button
         case .wordsLeft(let words):
-            return LocalizedPlural("passphrase_sign_in_button_placeholder", for: words)
+            return LocalizedPlural.passphrase_sign_in_button_placeholder(for: words)
         }
     }
 }
@@ -50,7 +50,7 @@ enum SingInScreenLabel {
     var accessibilityLabel: String {
         switch self {
         case .error(let words):
-            return LocalizedPlural("passphrase_sign_in_error", for: words)
+            return LocalizedPlural.passphrase_sign_in_error(for: words)
         }
     }
 }
@@ -77,7 +77,7 @@ extension SignInRobot {
     @discardableResult
     func validateOnSignInScreen(file: StaticString = #file,
                                 line: UInt = #line) -> SignInRobot {
-        confirmViewVisibleWith(accessibilityLabel: Localized("passphrase_sign_in_title"),
+        confirmViewVisibleWith(accessibilityLabel: Localized.passphrase_sign_in_title,
                                file: file,
                                line: line)
         
@@ -87,7 +87,7 @@ extension SignInRobot {
     @discardableResult
     func validateOffSignInScreen(file: StaticString = #file,
                                  line: UInt = #line) -> SignInRobot {
-        confirmViewGoneWith(accessibilityLabel: Localized("passphrase_sign_in_title"),
+        confirmViewGoneWith(accessibilityLabel: Localized.passphrase_sign_in_title,
                             file: file,
                             line: line)
         

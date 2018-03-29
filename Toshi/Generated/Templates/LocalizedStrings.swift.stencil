@@ -1,0 +1,20 @@
+// This file is machine-generated. DO NOT EDIT IT BY HAND - your edits will get overwritten.
+
+import Foundation
+
+enum LocalizedKey: String, StringCaseListable {
+    case
+    {% for string in localized_strings %}{{ string.key }}{% if not forloop.last %},
+    {% endif %}{% endfor %}
+
+    var currentValue: String {
+        return NSLocalizedString(rawValue, comment: "")
+    }
+}
+
+struct Localized {
+    {% for string in localized_strings %}
+    /// `{{ developer_language }}`: "{{ string.value }}"
+    static let {{ string.key }} = LocalizedKey.{{ string.key }}.currentValue{% if not forloop.last %}
+    {% endif %}{% endfor %}
+}

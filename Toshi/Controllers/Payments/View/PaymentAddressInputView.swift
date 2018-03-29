@@ -29,7 +29,7 @@ final class PaymentAddressInputView: UIView {
         let view = UITextField()
         view.font = Theme.preferredRegular()
         view.delegate = self
-        view.placeholder = Localized("payment_input_placeholder")
+        view.placeholder = Localized.payment_input_placeholder
         view.returnKeyType = .send
         view.adjustsFontForContentSizeCategory = true
 
@@ -37,7 +37,7 @@ final class PaymentAddressInputView: UIView {
     }()
 
     private lazy var qrButton: UIButton = {
-        let image = UIImage(named: "qr-icon")?.withRenderingMode(.alwaysTemplate)
+        let image = ImageAsset.qr_icon.withRenderingMode(.alwaysTemplate)
 
         let view = UIButton()
         view.contentMode = .center

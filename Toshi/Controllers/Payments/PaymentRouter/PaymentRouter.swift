@@ -17,7 +17,7 @@ import UIKit
 
 protocol PaymentRouterDelegate: class {
     func paymentRouterDidCancel(paymentRouter: PaymentRouter)
-    func paymentRouterDidSucceedPayment(_ paymentRouter: PaymentRouter, parameters: [String: Any], transactionHash: String?, unsignedTransaction: String?, error: ToshiError?)
+    func paymentRouterDidSucceedPayment(_ paymentRouter: PaymentRouter, parameters: [String: Any], transactionHash: String?, unsignedTransaction: String?, recipientInfo: UserInfo?, error: ToshiError?)
 }
 
 extension PaymentRouterDelegate {
@@ -146,7 +146,7 @@ extension PaymentRouter: PaymentAddressControllerDelegate {
 
 extension PaymentRouter: PaymentConfirmationViewControllerDelegate {
 
-    func paymentConfirmationViewControllerFinished(on controller: PaymentConfirmationViewController, parameters: [String: Any], transactionHash: String?, error: ToshiError?) {
+    func paymentConfirmationViewControllerFinished(on controller: PaymentConfirmationViewController, parameters: [String: Any], transactionHash: String?, recipientInfo: UserInfo?, error: ToshiError?) {
 
         guard let tabBarController = Navigator.tabbarController,
               let selectedNavigationController = tabBarController.selectedViewController as? UINavigationController,
@@ -155,11 +155,14 @@ extension PaymentRouter: PaymentConfirmationViewControllerDelegate {
         // Top view controller is always the last one from payment related stack, important to dismiss without animation
         Navigator.topViewController?.dismiss(animated: false, completion: {
             // First present controller in the stack is first in payment related flow, the very root payment related navigation controller which is presented
-            // dismissing it - it last step
-            firstPaymentPresentedController.dismiss(animated: true, completion: nil)
+            // dismissing it - is the last step; although, if the Payment confirmation is presented on top of Browser - we should avoid this step, as we should keep Browser alive
+
+            if !(firstPaymentPresentedController is SOFAWebController) {
+                firstPaymentPresentedController.dismiss(animated: true, completion: nil)
+            }
         })
 
-        self.delegate?.paymentRouterDidSucceedPayment(self, parameters: parameters, transactionHash: transactionHash, unsignedTransaction: controller.originalUnsignedTransaction, error: error)
+        self.delegate?.paymentRouterDidSucceedPayment(self, parameters: parameters, transactionHash: transactionHash, unsignedTransaction: controller.originalUnsignedTransaction, recipientInfo: recipientInfo, error: error)
     }
 
     func paymentConfirmationViewControllerDidCancel(_ controller: PaymentConfirmationViewController) {

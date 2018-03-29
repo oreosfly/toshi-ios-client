@@ -26,18 +26,18 @@ final class AcceptDeclineButtonsView: UIView {
 
     private lazy var acceptButton: ChatButton = {
         let acceptButton = ChatButton()
-        acceptButton.title = Localized("accept_button_title")
+        acceptButton.title = Localized.accept_button_title
         acceptButton.addTarget(self, action: #selector(didSelectAccept), for: .touchUpInside)
-        acceptButton.leftImage = UIImage(named: "approve_icon")?.withRenderingMode(.alwaysTemplate)
+        acceptButton.leftImage = ImageAsset.approve_icon.withRenderingMode(.alwaysTemplate)
 
         return acceptButton
     }()
 
     private lazy var declineButton: ChatButton = {
         let declineButton = ChatButton()
-        declineButton.title = Localized("decline_button_title")
+        declineButton.title = Localized.decline_button_title
         declineButton.addTarget(self, action: #selector(didSelectDecline), for: .touchUpInside)
-        declineButton.leftImage = UIImage(named: "decline_icon")?.withRenderingMode(.alwaysTemplate)
+        declineButton.leftImage = ImageAsset.decline_icon.withRenderingMode(.alwaysTemplate)
 
         declineButton.setTintColor(Theme.inactiveButtonColor)
 

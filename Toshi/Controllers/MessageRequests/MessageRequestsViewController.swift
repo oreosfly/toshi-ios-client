@@ -100,20 +100,20 @@ extension MessagesRequestsViewController: UITableViewDataSource {
             switch SofaType(sofa: messageBody) {
             case .message:
                 if message.hasAttachments() {
-                    subtitle = Localized("attachment_message_preview_string")
+                    subtitle = Localized.attachment_message_preview_string
                 } else {
                     subtitle = SofaMessage(content: messageBody).body
                 }
             case .paymentRequest:
-                subtitle = Localized("payment_request_message_preview_string")
+                subtitle = Localized.payment_request_message_preview_string
             case .payment:
-                subtitle = Localized("payment_message_preview_string")
+                subtitle = Localized.payment_message_preview_string
             default:
                 break
             }
         }
 
-        let cellData = TableCellData(title: title, subtitle: subtitle, leftImage: avatar, doubleActionImages: (firstImage: UIImage(named: "accept_thread_icon")!, secondImage: UIImage(named: "decline_thread_icon")!))
+        let cellData = TableCellData(title: title, subtitle: subtitle, leftImage: avatar, doubleActionImages: (firstImage: ImageAsset.accept_thread_icon, secondImage: ImageAsset.decline_thread_icon))
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellConfigurator.cellIdentifier(for: cellData.components), for: indexPath) as? BasicTableViewCell else { return UITableViewCell(frame: .zero) }
         cellConfigurator.configureCell(cell, with: cellData)
         cell.actionDelegate = self

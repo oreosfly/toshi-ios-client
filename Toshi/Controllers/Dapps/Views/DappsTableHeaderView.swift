@@ -48,8 +48,15 @@ final class DappsTableHeaderView: UIView {
         let backgroundView = UIView()
         backgroundView.backgroundColor = Theme.tintColor
         backgroundView.isUserInteractionEnabled = false
+        backgroundView.clipsToBounds = true
 
         return backgroundView
+    }()
+
+    private lazy var bubblesImageView: UIImageView = {
+        let bubblesImageView = UIImageView(image: ImageAsset.bubbles)
+
+        return bubblesImageView
     }()
 
     private lazy var collapsedBackgroundView: UIView = {
@@ -64,7 +71,7 @@ final class DappsTableHeaderView: UIView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = Theme.viewBackgroundColor
-        label.text = Localized("dapps-search-header-title")
+        label.text = Localized.dapps_search_header_title
         label.font = Theme.semibold(size: 20)
         label.textAlignment = .center
 
@@ -75,7 +82,7 @@ final class DappsTableHeaderView: UIView {
         let imageView = UIImageView()
         imageView.size(CGSize(width: 48, height: 48))
         imageView.contentMode = .scaleAspectFit
-        imageView.image = #imageLiteral(resourceName: "logo")
+        imageView.image = ImageAsset.logo
 
         return imageView
     }()
@@ -85,7 +92,7 @@ final class DappsTableHeaderView: UIView {
         textField.delegate = self
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
-        textField.placeholder = Localized("dapps-search-placeholder")
+        textField.attributedPlaceholder = NSAttributedString(string: Localized.dapps_search_placeholder, attributes: [.foregroundColor: Theme.greyTextColor])
         textField.borderStyle = .none
         textField.layer.cornerRadius = 5
 
@@ -104,7 +111,7 @@ final class DappsTableHeaderView: UIView {
 
     private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton()
-        cancelButton.setTitle(Localized("cancel_action_title"), for: .normal)
+        cancelButton.setTitle(Localized.cancel_action_title, for: .normal)
         cancelButton.setTitleColor(Theme.tintColor, for: .normal)
         cancelButton.addTarget(self, action: #selector(didTapCancelButton), for: .touchUpInside)
         cancelButton.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -162,6 +169,10 @@ final class DappsTableHeaderView: UIView {
         addSubview(expandedBackgroundView)
         expandedBackgroundView.edges(to: self)
 
+        expandedBackgroundView.addSubview(bubblesImageView)
+        bubblesImageView.bottom(to: expandedBackgroundView)
+        bubblesImageView.centerX(to: expandedBackgroundView)
+
         addSubview(collapsedBackgroundView)
         collapsedBackgroundView.edges(to: self)
 
@@ -215,7 +226,7 @@ final class DappsTableHeaderView: UIView {
 
         searchTextField.backgroundColor = UIColor.white.withAlphaComponent(fadeOut(percentage, in: 0.89 ... 1))
         searchTextFieldBackgroundView.alpha = fadeIn(percentage, in: 0.89 ... 1)
-        searchTextField.xInset = (1 - percentage).map(from: 0 ... 1, to: 15 ... 20)
+        searchTextField.xInset = (1 - percentage).map(from: 0 ... 1, to: 14 ... 19)
     }
 
     func didScroll(to percentage: CGFloat) {

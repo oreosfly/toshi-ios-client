@@ -32,12 +32,12 @@ final class WalletQRCodeViewController: UIViewController {
     private lazy var closeButton: UIButton = {
         let button = UIButton()
 
-        button.setImage(#imageLiteral(resourceName: "close_icon"), for: .normal)
+        button.setImage(ImageAsset.close_icon, for: .normal)
         button.tintColor = Theme.tintColor
         button.width(.defaultButtonHeight)
         button.height(.defaultButtonHeight)
 
-        button.accessibilityLabel = Localized("accessibility_close")
+        button.accessibilityLabel = Localized.accessibility_close
         button.addTarget(self,
                          action: #selector(closeButtonTapped),
                          for: .touchUpInside)
@@ -51,7 +51,7 @@ final class WalletQRCodeViewController: UIViewController {
         let button = UIButton(type: .custom)
         button.addBorder(ofColor: Theme.tintColor)
         button.layer.cornerRadius = cornerRadius
-        button.setTitle(Localized("share_action_title"), for: .normal)
+        button.setTitle(Localized.share_action_title, for: .normal)
         button.setTitleColor(Theme.tintColor, for: .normal)
         button.addTarget(self,
                          action: #selector(shareButtonTapped),
@@ -64,7 +64,7 @@ final class WalletQRCodeViewController: UIViewController {
         let button = UIButton(type: .custom)
         button.addBorder(ofColor: Theme.tintColor)
         button.layer.cornerRadius = cornerRadius
-        button.setTitle(Localized("copy_action_title"), for: .normal)
+        button.setTitle(Localized.copy_action_title, for: .normal)
         button.setTitleColor(Theme.tintColor, for: .normal)
         button.addTarget(self,
                          action: #selector(copyButtonTapped),
@@ -77,7 +77,7 @@ final class WalletQRCodeViewController: UIViewController {
         let label = UILabel()
         label.textColor = Theme.darkTextColor
         label.font = Theme.preferredRegularMedium()
-        label.text = Localized("wallet_address_title")
+        label.text = Localized.wallet_address_title
         
         return label
     }()
@@ -87,7 +87,7 @@ final class WalletQRCodeViewController: UIViewController {
         label.textColor = Theme.darkTextHalfAlpha
         label.numberOfLines = 0
         label.font = Theme.preferredFootnote()
-        label.text = Localized("wallet_address_description")
+        label.text = Localized.wallet_address_description
         label.textAlignment = .center
 
         return label

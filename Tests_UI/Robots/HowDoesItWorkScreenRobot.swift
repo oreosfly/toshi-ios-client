@@ -29,7 +29,7 @@ enum HowDoesItWorkScreenButton {
     var accessibilityLabel: String {
         switch self {
         case .back:
-            return Localized("back_action_title")
+            return Localized.back_action_title
         }
     }
 }
@@ -55,7 +55,7 @@ extension HowDoesItWorkScreenRobot {
     
     @discardableResult
     func validateOnHowDoesItWorkScreen(file: StaticString = #file, line: UInt = #line) -> HowDoesItWorkScreenRobot {
-        confirmViewVisibleWith(accessibilityLabel: Localized("passphrase_sign_in_explanation_title"),
+        confirmViewVisibleWith(accessibilityLabel: Localized.passphrase_sign_in_explanation_title,
                                file: file,
                                line: line)
         return self
@@ -63,7 +63,7 @@ extension HowDoesItWorkScreenRobot {
     
     @discardableResult
     func validateOffHowDoesItWorkScreen(file: StaticString = #file, line: UInt = #line) -> HowDoesItWorkScreenRobot {
-        confirmViewGoneWith(accessibilityLabel: Localized("passphrase_sign_in_explanation_title"),
+        confirmViewGoneWith(accessibilityLabel: Localized.passphrase_sign_in_explanation_title,
                             file: file,
                             line: line)
         

@@ -25,9 +25,9 @@ enum GroupItemType: Int {
 }
 
 struct GroupInfo {
-    let placeholder = Localized("new_group_title")
+    let placeholder = Localized.new_group_title
     var title: String = ""
-    var avatar = #imageLiteral(resourceName: "avatar-placeholder")
+    var avatar = ImageAsset.avatar_placeholder
     var isPublic = false
     var notificationsOn = true
     var participantsIDs: [String] = []

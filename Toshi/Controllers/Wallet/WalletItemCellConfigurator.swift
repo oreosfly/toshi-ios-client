@@ -22,7 +22,7 @@ final class WalletItemCellConfigurator: CellConfigurator {
 
         guard let cell = cell as? BasicTableViewCell else { return }
 
-        cell.detailsFont = Theme.preferredRegular()
+        cell.detailsLabel.font = Theme.preferredRegular()
         cell.badgeLabel.font = Theme.proTextRegular(size: 15)
         cell.badgeLabel.textColor = Theme.greyTextColor
         cell.badgeView.backgroundColor = .clear
@@ -37,7 +37,7 @@ final class WalletItemCellConfigurator: CellConfigurator {
 
         cell.leftImageView.contentMode = .scaleAspectFit
         if cell.leftImageView.image == nil {
-            cell.leftImageView.image = #imageLiteral(resourceName: "token_placeholder")
+            cell.leftImageView.image = ImageAsset.token_placeholder
         }
     }
 }

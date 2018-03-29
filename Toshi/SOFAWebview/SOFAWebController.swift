@@ -39,7 +39,10 @@ final class SOFAWebController: UIViewController {
         return EthereumAPIClient.shared
     }
 
+    private var observers = [NSKeyValueObservation]()
+
     private let rcpUrl = ToshiWebviewRPCURLPath
+    private let netVersion = ToshiWebviewRCPURLNetVersion
     private var paymentRouter: PaymentRouter?
 
     private var currentTransactionSignCallbackId: String?
@@ -49,7 +52,7 @@ final class SOFAWebController: UIViewController {
     private lazy var webViewConfiguration: WKWebViewConfiguration = {
         let configuration = WKWebViewConfiguration()
         
-        var js = "window.SOFA = {config: {accounts: ['"+Cereal.shared.paymentAddress+"'], rcpUrl: '" + self.rcpUrl + "'}}; "
+        var js = "window.SOFA = {config: {netVersion: '" + self.netVersion + "', accounts: ['"+Cereal.shared.paymentAddress+"'], rcpUrl: '" + self.rcpUrl + "'}}; "
         
         if let filepath = Bundle.main.path(forResource: "sofa-web3", ofType: "js") {
             do {
@@ -94,27 +97,27 @@ final class SOFAWebController: UIViewController {
     }()
 
     private lazy var backButton: UIButton = {
-        let view = UIButton(type: .custom)
+        let view = TintColorChangingButton()
         view.size(CGSize(width: .defaultButtonHeight, height: .defaultButtonHeight))
-        view.tintColor = Theme.tintColor
-        view.setImage(#imageLiteral(resourceName: "web_back").withRenderingMode(.alwaysTemplate), for: .normal)
+        view.setImage(ImageAsset.web_back.withRenderingMode(.alwaysTemplate), for: .normal)
         view.addTarget(self, action: #selector(self.didTapBackButton), for: .touchUpInside)
+        view.isEnabled = false
 
         return view
     }()
 
     private lazy var forwardButton: UIButton = {
-        let view = UIButton(type: .custom)
+        let view = TintColorChangingButton()
         view.size(CGSize(width: .defaultButtonHeight, height: .defaultButtonHeight))
-        view.tintColor = Theme.tintColor
-        view.setImage(#imageLiteral(resourceName: "web_forward").withRenderingMode(.alwaysTemplate), for: .normal)
+        view.setImage(ImageAsset.web_forward.withRenderingMode(.alwaysTemplate), for: .normal)
         view.addTarget(self, action: #selector(self.didTapForwardButton), for: .touchUpInside)
+        view.isEnabled = false
 
         return view
     }()
 
     private lazy var browseIcon: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "web-browse-icon"))
+        let imageView = UIImageView(image: ImageAsset.web_browse_icon)
         imageView.contentMode = .center
         imageView.size(CGSize(width: 36, height: 36))
 
@@ -124,11 +127,11 @@ final class SOFAWebController: UIViewController {
     private lazy var closeButton: UIButton = {
         let button = UIButton()
 
-        button.setImage(#imageLiteral(resourceName: "close_icon"), for: .normal)
+        button.setImage(ImageAsset.close_icon, for: .normal)
         button.tintColor = Theme.tintColor
         button.size(CGSize(width: .defaultButtonHeight, height: .defaultButtonHeight))
 
-        button.accessibilityLabel = Localized("accessibility_close")
+        button.accessibilityLabel = Localized.accessibility_close
         button.addTarget(self,
                          action: #selector(closeButtonTapped),
                          for: .touchUpInside)
@@ -155,7 +158,7 @@ final class SOFAWebController: UIViewController {
 
         backgroundView.addSubview(browseIcon)
 
-        browseIcon.leftToSuperview(offset: .smallInterItemSpacing)
+        browseIcon.leftToSuperview()
         browseIcon.centerYToSuperview()
 
         backgroundView.addSubview(searchTextField)
@@ -221,12 +224,14 @@ final class SOFAWebController: UIViewController {
         toolbar.top(to: layoutGuide())
         toolbar.left(to: view)
         toolbar.right(to: view)
-        toolbar.height(.defaultBarHeight)
+        toolbar.height(56)
 
         webView.topToBottom(of: toolbar)
         webView.left(to: view)
         webView.right(to: view)
         webView.bottom(to: layoutGuide())
+
+        setupKVO()
 
         hidesBottomBarWhenPushed = true
 
@@ -254,6 +259,34 @@ final class SOFAWebController: UIViewController {
 
     required init?(coder _: NSCoder) {
         fatalError()
+    }
+
+    deinit {
+        // Remove KVO stuff
+        observers.forEach { $0.invalidate() }
+    }
+
+    private func setupKVO() {
+        let forwardObserver = webView.observe(\WKWebView.canGoForward, changeHandler: { [weak self] webView, _ in
+            self?.forwardButton.isEnabled = webView.canGoForward
+        })
+        observers.append(forwardObserver)
+
+        let backObserver = webView.observe(\WKWebView.canGoBack, changeHandler: { [weak self] webView, _ in
+            self?.backButton.isEnabled = webView.canGoBack
+        })
+        observers.append(backObserver)
+
+        let urlObserver = webView.observe(\WKWebView.url) { [weak self] webView, _ in
+            guard
+                let newURLString = webView.url?.absoluteString,
+                newURLString != self?.searchTextField.text else {
+                    return
+            }
+
+            self?.searchTextField.text = newURLString
+        }
+        observers.append(urlObserver)
     }
 
     @objc
@@ -375,7 +408,7 @@ extension SOFAWebController: WKScriptMessageHandler {
             }
 
             DispatchQueue.main.async {
-                self.presentPersonalMessageSignAlert("\(Localized("eth_sign_warning"))\n\n\(messageEncodedString)", callbackId: callbackId, signHandler: { [weak self] returnedCallbackId in
+                self.presentPersonalMessageSignAlert("\(Localized.eth_sign_warning))\n\n\(messageEncodedString)", callbackId: callbackId, signHandler: { [weak self] returnedCallbackId in
 
                     var signature = "0x\(Cereal.shared.signWithWallet(hash: messageEncodedString))"
 
@@ -452,7 +485,7 @@ extension SOFAWebController: WKScriptMessageHandler {
                     let decimalValue = NSDecimalNumber(hexadecimalString: value)
                     let fiatValueString = EthereumConverter.fiatValueString(forWei: decimalValue, exchangeRate: ExchangeRateClient.exchangeRate)
                     let ethValueString = EthereumConverter.ethereumValueString(forWei: decimalValue)
-                    let messageText = String(format: Localized("payment_confirmation_warning_message"), fiatValueString, ethValueString, user?.name ?? to)
+                    let messageText = String(format: Localized.payment_confirmation_warning_message, fiatValueString, ethValueString, user?.name ?? to)
 
                     self?.presentPaymentConfirmation(with: messageText, parameters: parameters, userInfo: userInfo, dappInfo: dappInfo, callbackId: callbackId)
                 })
@@ -523,9 +556,9 @@ extension SOFAWebController: WKScriptMessageHandler {
 
     private func presentPersonalMessageSignAlert(_ message: String, callbackId: String, signHandler: @escaping ((String) -> Void)) {
 
-        let alert = UIAlertController(title: Localized("sign_alert_title"), message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: Localized("cancel_action_title"), style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: Localized("sign_action_title"), style: .default, handler: { _ in
+        let alert = UIAlertController(title: Localized.sign_alert_title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: Localized.cancel_action_title, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: Localized.sign_action_title, style: .default, handler: { _ in
             signHandler(callbackId)
         }))
 
@@ -541,7 +574,7 @@ extension SOFAWebController: ActivityIndicating {
 
 extension SOFAWebController: PaymentRouterDelegate {
 
-    func paymentRouterDidSucceedPayment(_ paymentRouter: PaymentRouter, parameters: [String: Any], transactionHash: String?, unsignedTransaction: String?, error: ToshiError?) {
+    func paymentRouterDidSucceedPayment(_ paymentRouter: PaymentRouter, parameters: [String: Any], transactionHash: String?, unsignedTransaction: String?, recipientInfo: UserInfo?, error: ToshiError?) {
 
         guard let callbackId = currentTransactionSignCallbackId else {
             let message = "No current signed transcation callBack Id on SOFAWebVontroller when payment router finished"
@@ -599,7 +632,7 @@ extension SOFAWebController: WKUIDelegate {
 
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         let controller = UIAlertController(title: message, message: nil, preferredStyle: .alert)
-        controller.addAction(UIAlertAction(title: Localized("alert-ok-action-title"), style: .default, handler: { _ in
+        controller.addAction(UIAlertAction(title: Localized.alert_ok_action_title, style: .default, handler: { _ in
             completionHandler()
         }))
 
@@ -608,10 +641,10 @@ extension SOFAWebController: WKUIDelegate {
 
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Swift.Void) {
         let controller = UIAlertController(title: message, message: nil, preferredStyle: .alert)
-        controller.addAction(UIAlertAction(title: Localized("alert-ok-action-title"), style: .default, handler: { _ in
+        controller.addAction(UIAlertAction(title: Localized.alert_ok_action_title, style: .default, handler: { _ in
             completionHandler(true)
         }))
-        controller.addAction(UIAlertAction(title: Localized("cancel_action_title"), style: .default, handler: { _ in
+        controller.addAction(UIAlertAction(title: Localized.cancel_action_title, style: .default, handler: { _ in
             completionHandler(false)
         }))
 
@@ -625,7 +658,7 @@ extension SOFAWebController: WKUIDelegate {
             textField.text = defaultText
         }
 
-        controller.addAction(UIAlertAction(title: Localized("alert-ok-action-title"), style: .default, handler: { _ in
+        controller.addAction(UIAlertAction(title: Localized.alert_ok_action_title, style: .default, handler: { _ in
             if let text = controller.textFields?.first?.text {
                 completionHandler(text)
             } else {
@@ -633,7 +666,7 @@ extension SOFAWebController: WKUIDelegate {
             }
         }))
 
-        controller.addAction(UIAlertAction(title: Localized("cancel_action_title"), style: .default, handler: { _ in
+        controller.addAction(UIAlertAction(title: Localized.cancel_action_title, style: .default, handler: { _ in
             completionHandler(nil)
         }))
 

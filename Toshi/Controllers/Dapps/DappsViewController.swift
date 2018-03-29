@@ -26,13 +26,13 @@ enum BrowseContentSection: Int {
     var title: String {
         switch self {
         case .topRatedApps:
-            return Localized("browse-top-rated-apps")
+            return Localized.browse_top_rated_apps
         case .featuredDapps:
-            return Localized("browse-featured-dapps")
+            return Localized.browse_featured_dapps
         case .topRatedPublicUsers:
-            return Localized("browse-top-rated-public-users")
+            return Localized.browse_top_rated_public_users
         case .latestPublicUsers:
-            return Localized("browse-latest-public-users")
+            return Localized.browse_latest_public_users
         }
     }
 }
@@ -71,7 +71,6 @@ final class DappsViewController: UIViewController {
         return statusBarStyle
     }
 
-    let dappsHeaderHefight: CGFloat = 280
     let defaultSectionHeaderHeight: CGFloat = 50
     let searchedResultsSectionHeaderHeight: CGFloat = 24
 
@@ -112,7 +111,7 @@ final class DappsViewController: UIViewController {
         BasicTableViewCell.register(in: view)
         view.register(UITableViewCell.self, forCellReuseIdentifier: buttonCellReuseIdentifier)
         view.register(UITableViewCell.self, forCellReuseIdentifier: genericCellReuseIdentifier)
-        view.separatorInset = UIEdgeInsets(top: 0, left: 100, bottom: 0, right: .defaultMargin)
+        view.separatorStyle = .none
 
         return view
     }()
@@ -122,7 +121,7 @@ final class DappsViewController: UIViewController {
         button.addTarget(self,
                          action: #selector(didTapSeeAllDappsButton(_:)),
                          for: .touchUpInside)
-        button.title = Localized("dapps-see-all-button-title")
+        button.title = Localized.dapps_see_all_button_title
 
         return button
     }()
@@ -143,7 +142,7 @@ final class DappsViewController: UIViewController {
         view.register(RectImageTitleSubtitleTableViewCell.self)
         view.register(UITableViewCell.self, forCellReuseIdentifier: buttonCellReuseIdentifier)
         view.register(UITableViewCell.self, forCellReuseIdentifier: genericCellReuseIdentifier)
-        view.separatorInset = UIEdgeInsets(top: 0, left: 100, bottom: 0, right: .defaultMargin)
+        view.separatorStyle = .none
 
         return view
     }()
@@ -220,7 +219,7 @@ final class DappsViewController: UIViewController {
     }
 
     @objc private func didTapSeeAllDappsButton(_ button: UIButton) {
-        let categoryDappsViewController = DappsListViewController(name: Localized("dapps-all-list-title"))
+        let categoryDappsViewController = DappsListViewController(name: Localized.dapps_all_list_title)
         Navigator.push(categoryDappsViewController)
     }
 }
@@ -236,7 +235,6 @@ extension DappsViewController: DappsDataSourceDelegate {
         }
 
         tableView.reloadData()
-
         searchResultsTableView.reloadData()
     }
 }
@@ -264,34 +262,34 @@ extension DappsViewController: UITableViewDataSource {
             cell.selectionStyle = .none
             cell.textLabel?.text = item.displayTitle
             cell.textLabel?.textColor = Theme.tintColor
-            cell.separatorInset = .zero
             return cell
         case .searchWithGoogle:
             let cell = tableView.dequeueReusableCell(withIdentifier: genericCellReuseIdentifier, for: indexPath)
 
             cell.selectionStyle = .none
 
-            let googleText = " - \(Localized("dapps-search-with-google-section-title"))"
+            let googleText = " – \(Localized.dapps_search_with_google_section_title)"
             let text = (item.displayTitle ?? "") + googleText
             let attributedString = NSMutableAttributedString(string: text)
 
-            attributedString.addAttribute(.font, value: Theme.preferredRegular(), range: NSRange(location: 0, length: attributedString.length))
+            attributedString.addAttribute(.font, value: Theme.preferredRegularTiny(), range: NSRange(location: 0, length: attributedString.length))
             if let range = text.range(of: googleText) {
-                attributedString.addAttribute(.foregroundColor, value: Theme.lightGreyTextColor, range: NSRange(location: range.lowerBound.encodedOffset, length: googleText.count))
+                attributedString.addAttribute(.foregroundColor, value: Theme.placeholderTextColor, range: NSRange(location: range.lowerBound.encodedOffset, length: googleText.count))
             }
 
             cell.textLabel?.attributedText = attributedString
-            cell.separatorInset = .zero
+
             return cell
         case .dappFront:
             let cell = tableView.dequeue(RectImageTitleSubtitleTableViewCell.self, for: indexPath)
             cell.titleLabel.text = item.displayTitle
             cell.subtitleLabel.text = item.displayDetails
-            cell.leftImageView.image = #imageLiteral(resourceName: "collectible_placeholder")
+            cell.leftImageView.image = ImageAsset.collectible_placeholder
             cell.imageViewPath = item.itemIconPath
-            cell.leftImageView.layer.cornerRadius = 10
-            return cell
 
+            setCustomSeparators(for: indexPath, on: cell)
+
+            return cell
         case .dappSearched:
             let cellData = TableCellData(title: item.displayTitle, subtitle: item.dapp?.url.absoluteString, leftImagePath: item.itemIconPath)
             let configurator = CellConfigurator()
@@ -301,7 +299,6 @@ extension DappsViewController: UITableViewDataSource {
             cell.leftImageView.layer.cornerRadius = 5
 
             return cell
-
         case .seeAll:
             let cell = tableView.dequeueReusableCell(withIdentifier: buttonCellReuseIdentifier, for: indexPath)
             cell.selectionStyle = .none
@@ -310,8 +307,15 @@ extension DappsViewController: UITableViewDataSource {
                                                                     left: .defaultMargin,
                                                                     bottom: .spacingx8,
                                                                     right: -.defaultMargin))
-            cell.separatorInset = .zero
             return cell
+        }
+    }
+
+    private func setCustomSeparators(for indexPath: IndexPath, on cell: RectImageTitleSubtitleTableViewCell) {
+        if dataSource.numberOfItems(in: indexPath.section) == (indexPath.row + 1) {
+            cell.sectionSeparator.alpha = 1
+        } else {
+            cell.customSeparator.alpha = 1
         }
     }
 
@@ -321,7 +325,7 @@ extension DappsViewController: UITableViewDataSource {
         let header = DappsSectionHeaderView(delegate: self)
         header.backgroundColor = dataSource.mode == .frontPage ? Theme.viewBackgroundColor : Theme.lighterGreyTextColor
         header.titleLabel.textColor = dataSource.mode == .frontPage ? Theme.greyTextColor : Theme.lightGreyTextColor
-        header.actionButton.setTitle(Localized("dapps-see-more-button-title"), for: .normal)
+        header.actionButton.setTitle(Localized.dapps_see_more_button_title, for: .normal)
         header.tag = section
 
         header.titleLabel.text = sectionData.name?.uppercased()
@@ -337,9 +341,11 @@ extension DappsViewController: UITableViewDataSource {
             return defaultSectionHeaderHeight
         case .allOrFiltered:
             guard let sectionData = dataSource.section(at: section), sectionData.name != nil else { return 0 }
+            
             return searchedResultsSectionHeaderHeight
         }
     }
+
 }
 
 extension DappsViewController: DappsSectionHeaderViewDelegate {
@@ -470,14 +476,12 @@ extension DappsViewController: DappsSearchHeaderViewDelegate {
         view.layoutIfNeeded()
         headerView.adjustNonAnimatedProperties(to: headerView.collapsedStateScrollPercentage)
 
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.3) {
             self.searchResultsTableView.alpha = 1
             self.statusBarStyle = UIStatusBarStyle.default
             self.headerView.adjustAnimatedProperties(to: self.headerView.collapsedStateScrollPercentage)
             self.view.layoutIfNeeded()
-        }, completion: { _ in
-            self.headerView.showCancelButton()
-        })
+        }
     }
 
     func didRequireDefaultState(_ headerView: DappsTableHeaderView) {
